@@ -72,6 +72,7 @@ export function renderAuthPageComponent({ appEl, setUser }) {
         onImageUrlChange(newImageUrl) {
           imageUrl = newImageUrl;
         },
+        page:"AUTH",
       });
     }
 

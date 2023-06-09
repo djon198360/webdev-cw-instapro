@@ -1,11 +1,35 @@
 import { uploadImage } from "../api.js";
+import { setError } from "./error.js";
 
-export function renderUploadImageComponent({ element, onImageUrlChange }) {
+export function renderUploadImageComponent({ element, onImageUrlChange, page = null }) {
   let imageUrl = "";
 
   const render = () => {
-    element.innerHTML = `
-  <div class="upload=image">
+    element.innerHTML = `${page === "ADD_POST" ? `
+    ${
+      imageUrl
+        ? `<div class="upload=image">
+        <div class="file-upload-image-conrainer">
+          <img class="file-upload-image" src="${imageUrl}">
+          <button class="file-upload-remove-button button">Заменить изображение</button>
+        </div>
+        </div>
+        <p>Введите описание изображения</p>
+          <textarea name="description" class="textarea" id="comments" cols="70" rows="10"></textarea>
+        `
+        : `
+          <label class="file-upload-label secondary-button">
+              <input
+                type="file"
+                class="file-upload-input"
+                style="display:none"
+              />
+              Выберите изображение
+          </label>  
+    `
+    }
+</div> ` :
+  `<div class="upload=image">
       ${
         imageUrl
           ? `
@@ -24,9 +48,10 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
                 Выберите фото
             </label>
           
-      `
+            </div>`
       }
-  </div>
+ 
+   ` }
 `;
 
     const fileInputElement = element.querySelector(".file-upload-input");
@@ -41,7 +66,12 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
           imageUrl = fileUrl;
           onImageUrlChange(imageUrl);
           render();
-        });
+        }).catch((error) => {
+          console.warn(error);
+          setError(error.message);
+          render ();
+        })
+        ;
       }
     });
 
