@@ -1,9 +1,9 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
+const personalKey = "djon198360";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
-
+import { setError } from "./components/error.js";
 
 
 export function getPosts({ token }) {
@@ -14,18 +14,11 @@ export function getPosts({ token }) {
     },
   })
     .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
       if (response.status === 401) {
         throw new Error("Нет авторизации");
       }
-      if (response.status === 413) {
-        throw new Error("Нет авторизации");
-      }
-      else {
-        throw new Error("Произошла ошибка,");
-      }
+
+      return response.json();
     })
     .then((data) => {
       return data.posts;
@@ -75,5 +68,64 @@ export function uploadImage({ file }) {
     body: data,
   }).then((response) => {
     return response.json();
+  });
+}
+
+
+export function addPost({ token, description, imageUrl}) {
+  return fetch(postsHost , {
+    method: "POST",
+    body: JSON.stringify({
+      description,
+      imageUrl,
+    }),
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Описание изображения отсутствует");
+    }
+    return response.json();
+  });
+}
+
+
+export function getUserPost({ id ,token}) {
+  return fetch(postsHost + "/user-posts/"+ id, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  
+  })
+    .then((response) => {
+      if (response.status === 500) {
+        throw new Error("Нет такого пользователя");
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      return data.posts;
+    });
+}
+
+export function getLike({ id,token,like}) {
+ (like === "true") ? like ="dislike": like="like";
+  return fetch(postsHost + "/"+id +"/"+like, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  })    .then((response) => {
+    if (response.status === 401) {
+      throw new Error("Нет авторизации");
+    }
+
+    return response.json();
+  })
+  .then((data) => {
+    return data.post;
   });
 }

@@ -1,6 +1,9 @@
+
 import { loginUser, registerUser } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
+import { setError } from "./error.js";
+
 
 export function renderAuthPageComponent({ appEl, setUser }) {
   let isLoginMode = true;
@@ -56,9 +59,9 @@ export function renderAuthPageComponent({ appEl, setUser }) {
 
     // Не вызываем перерендер, чтобы не сбрасывалась заполненная форма
     // Точечно обновляем кусочек дом дерева
-    const setError = (message) => {
+/*     const setError = (message) => {
       appEl.querySelector(".form-error").textContent = message;
-    };
+    }; */
 
     renderHeaderComponent({
       element: document.querySelector(".header-container"),
@@ -77,19 +80,19 @@ export function renderAuthPageComponent({ appEl, setUser }) {
     }
 
     document.getElementById("login-button").addEventListener("click", () => {
-      setError("");
+      
 
       if (isLoginMode) {
         const login = document.getElementById("login-input").value;
         const password = document.getElementById("password-input").value;
-
+const errorDiv =document.querySelector(".app_error");
         if (!login) {
-          alert("Введите логин");
+          setError("Введите логин");
           return;
         }
 
         if (!password) {
-          alert("Введите пароль");
+          setError("Введите пароль");
           return;
         }
 
@@ -108,22 +111,23 @@ export function renderAuthPageComponent({ appEl, setUser }) {
         const login = document.getElementById("login-input").value;
         const name = document.getElementById("name-input").value;
         const password = document.getElementById("password-input").value;
+        const errorDiv =document.querySelector(".app_error");
         if (!name) {
-          alert("Введите имя");
+          setError(errorDiv,"Введите имя 1");
           return;
         }
         if (!login) {
-          alert("Введите логин");
+          setError("Введите логин");
           return;
         }
 
         if (!password) {
-          alert("Введите пароль");
+          setError("Введите пароль");
           return;
         }
 
         if (!imageUrl) {
-          alert("Не выбрана фотография");
+         setError("Не выбрана фотография");
           return;
         }
 

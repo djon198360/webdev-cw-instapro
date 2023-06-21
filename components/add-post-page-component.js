@@ -13,13 +13,13 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       <h3 class="form-title">Добавить пост</h3>
           <div class="upload-image-container"></div>
           <div class="form-error"></div>
-
           <button class="button" id="add-button">Добавить пост</button>
           </div>
     </div>
   `;
     appEl.innerHTML = appHtml;
     const uploadImageContainer = appEl.querySelector(".upload-image-container");
+    
     renderHeaderComponent({
       element: document.querySelector(".header-container"),
     });
@@ -31,12 +31,14 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
         },
         page :  "ADD_POST",
       });
+      
     }
-
+    
     document.getElementById("add-button").addEventListener("click", () => {
+      const description = document.querySelector('.textarea_description').value;
       onAddPostClick({
-        description: "Описание картинки",
-        imageUrl: "https://image.png",
+        description: description,
+        imageUrl: imageUrl,
       });
     });
   };

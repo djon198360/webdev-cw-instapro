@@ -1,6 +1,11 @@
 
+//import { errorDiv } from "../index.js";
+//export const errorDiv = document.querySelector(".app_error");
+export function setError(errorDiv, message) {
+ 
+return   errorDiv.innerHTML  = message;
+}
 
-const appEl = document.getElementById("app");
-export const setError = (message) => {
-    appEl.querySelector(".form-error").textContent = message;
-  };
+/* export const setError = (message) => {
+    errorDiv.textContent = message;
+  }; */

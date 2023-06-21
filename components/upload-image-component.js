@@ -5,17 +5,17 @@ export function renderUploadImageComponent({ element, onImageUrlChange, page = n
   let imageUrl = "";
 
   const render = () => {
+
     element.innerHTML = `${page === "ADD_POST" ? `
-    ${
-      imageUrl
-        ? `<div class="upload=image">
+    ${imageUrl
+        ? `<div class="upload_image">
         <div class="file-upload-image-conrainer">
           <img class="file-upload-image" src="${imageUrl}">
           <button class="file-upload-remove-button button">Заменить изображение</button>
         </div>
         </div>
         <p>Введите описание изображения</p>
-          <textarea name="description" class="textarea" id="comments" cols="70" rows="10"></textarea>
+          <textarea name="description" class="textarea_description" id="comments" cols="70" rows="5"></textarea>
         `
         : `
           <label class="file-upload-label secondary-button">
@@ -27,18 +27,17 @@ export function renderUploadImageComponent({ element, onImageUrlChange, page = n
               Выберите изображение
           </label>  
     `
-    }
+      }
 </div> ` :
-  `<div class="upload=image">
-      ${
-        imageUrl
-          ? `
-          <div class="file-upload-image-conrainer">
-            <img class="file-upload-image" src="${imageUrl}">
+      `<div class="upload=image">
+      ${imageUrl
+        ? `
+          <div class="file-upload-foto-conrainer">
+            <img class="file-upload-foto" src="${imageUrl}">
             <button class="file-upload-remove-button button">Заменить фото</button>
           </div>
           `
-          : `
+        : `
             <label class="file-upload-label secondary-button">
                 <input
                   type="file"
@@ -47,10 +46,8 @@ export function renderUploadImageComponent({ element, onImageUrlChange, page = n
                 />
                 Выберите фото
             </label>
-          
             </div>`
       }
- 
    ` }
 `;
 
@@ -69,9 +66,9 @@ export function renderUploadImageComponent({ element, onImageUrlChange, page = n
         }).catch((error) => {
           console.warn(error);
           setError(error.message);
-          render ();
+          render();
         })
-        ;
+          ;
       }
     });
 
