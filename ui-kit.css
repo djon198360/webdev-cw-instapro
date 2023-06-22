@@ -43,7 +43,7 @@ p {
 }
 
 .button,
-.secondary-button {
+.secondary-button,.add_button {
   display: block;
   padding: 10px 13px 13px;
   font-size: 18px;
@@ -63,8 +63,11 @@ p {
   cursor: pointer;
 }
 
-.button:hover {
+.button:hover,.add_button:hover {
   background-color: #6d73ff;
+}
+.button:hover, .add_button:disabled {
+  background-color: #26284085;
 }
 
 .button[disabled="true"],

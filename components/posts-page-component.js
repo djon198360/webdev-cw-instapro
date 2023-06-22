@@ -44,7 +44,7 @@ export function renderPostsPageComponent({ appEl, id }) {
   renderHeaderComponent({
     element: document.querySelector(".header-container"),
   });
-
+  
   for (let userEl of document.querySelectorAll(".post-header")) {
     userEl.addEventListener("click", () => {
       goToPage(USER_POSTS_PAGE, {

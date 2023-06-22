@@ -1,3 +1,4 @@
+import { setError } from "./error.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
@@ -13,7 +14,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       <h3 class="form-title">Добавить пост</h3>
           <div class="upload-image-container"></div>
           <div class="form-error"></div>
-          <button class="button" id="add-button">Добавить пост</button>
+          <button disabled="true" class="add_button" id="add-button">Добавить пост</button>
           </div>
     </div>
   `;
@@ -23,6 +24,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     renderHeaderComponent({
       element: document.querySelector(".header-container"),
     });
+    const errorDiv = document.querySelector(".app_error");
     if (uploadImageContainer) {
       renderUploadImageComponent({
         element: appEl.querySelector(".upload-image-container"),
@@ -32,16 +34,27 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
         page :  "ADD_POST",
       });
       
+      
+
     }
-    
+ 
     document.getElementById("add-button").addEventListener("click", () => {
-      const description = document.querySelector('.textarea_description').value;
+      
+      if(document.querySelector('.textarea_description').value != "")
+      {
+        const description = document.querySelector('.textarea_description').value;
       onAddPostClick({
         description: description,
         imageUrl: imageUrl,
-      });
+      });}
+
+      else {setError(errorDiv,"Не заполнено описание");
+    return;}
+     
     });
   };
 
   render();
+
 }
+

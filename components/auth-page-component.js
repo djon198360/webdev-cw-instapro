@@ -87,12 +87,12 @@ export function renderAuthPageComponent({ appEl, setUser }) {
         const password = document.getElementById("password-input").value;
 const errorDiv =document.querySelector(".app_error");
         if (!login) {
-          setError("Введите логин");
+          setError(errorDiv,"Введите логин");
           return;
         }
 
         if (!password) {
-          setError("Введите пароль");
+          setError(errorDiv,"Введите пароль");
           return;
         }
 
@@ -104,8 +104,7 @@ const errorDiv =document.querySelector(".app_error");
             setUser(user.user);
           })
           .catch((error) => {
-            console.warn(error);
-            setError(error.message);
+            setError(errorDiv,error.message);
           });
       } else {
         const login = document.getElementById("login-input").value;
@@ -113,21 +112,21 @@ const errorDiv =document.querySelector(".app_error");
         const password = document.getElementById("password-input").value;
         const errorDiv =document.querySelector(".app_error");
         if (!name) {
-          setError(errorDiv,"Введите имя 1");
+          setError(errorDiv,"Введите имя");
           return;
         }
         if (!login) {
-          setError("Введите логин");
+          setError(errorDiv,"Введите логин");
           return;
         }
 
         if (!password) {
-          setError("Введите пароль");
+          setError(errorDiv,"Введите пароль");
           return;
         }
 
         if (!imageUrl) {
-         setError("Не выбрана фотография");
+          setError(errorDiv,"Не выбрана фотография");
           return;
         }
 
@@ -142,7 +141,7 @@ const errorDiv =document.querySelector(".app_error");
           })
           .catch((error) => {
             console.warn(error);
-            setError(error.message);
+            setError(errorDiv,error.message);
           });
       }
     });

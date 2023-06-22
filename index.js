@@ -19,7 +19,7 @@ import {
 import { renderUserPostPageComponent } from "./components/user-post-page-component.js";
 
 import { setError } from "./components/error.js";
-
+const errorDiv = document.querySelector(".app_error");
 export let user = getUserFromLocalStorage();
 export let page = null;
 export let posts = [];
@@ -56,6 +56,7 @@ export const goToPage = (newPage, data) => {
     }
 
     if (newPage === POSTS_PAGE) {
+      
       page = LOADING_PAGE;
       renderApp();
 
@@ -66,7 +67,11 @@ export const goToPage = (newPage, data) => {
           renderApp();
         })
         .catch((error) => {
-          console.error(error);
+          const errorDiv = document.querySelector(".app_error");
+          if(error ==='Failed to fetch'){
+            setError(errorDiv,'Остутстует интернет , или сервер не доступен.');
+          } 
+          setError(errorDiv,'Непредвиденная ошибка , попробуте перезагрузить страницу');
           goToPage(POSTS_PAGE);
         });
     }
@@ -106,7 +111,11 @@ export const goToPage = (newPage, data) => {
           });
         })
         .catch((error) => {
-          console.error(error);
+          const errorDiv = document.querySelector(".app_error");
+          if(error ==='Failed to fetch'){
+            setError(errorDiv,'Остутстует интернет , или сервер не доступен.');
+          } 
+          setError(errorDiv,'Непредвиденная ошибка , попробуте перезагрузить страницу');
           goToPage(AUTH_PAGE);
         });
     }
@@ -155,7 +164,10 @@ const renderApp = () => {
             renderApp();
           })
           .catch((error) => {
-            setError(error);
+            const errorDiv = document.querySelector(".app_error");
+          
+              setError(errorDiv,error);
+        //    setError(error);
             //  goToPage(ADD_POSTS_PAGE);
           });
       },
