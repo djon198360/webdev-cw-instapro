@@ -1,4 +1,4 @@
-import { addPost, getPosts, getUserPost, getLike,delPost } from "./api.js";
+import { addPost, getPosts, getUserPost, getLike, delPost } from "./api.js";
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { renderAuthPageComponent } from "./components/auth-page-component.js";
 import {
@@ -61,7 +61,7 @@ export const goToPage = (newPage, data) => {
     }
 
     if (newPage === POSTS_PAGE) {
-      
+
       page = LOADING_PAGE;
       renderApp();
 
@@ -73,13 +73,13 @@ export const goToPage = (newPage, data) => {
         })
         .catch((error) => {
           const errorDiv = document.querySelector(".app_error");
-          if(error ==='Failed to fetch'){
-            setError(errorDiv,'Остутстует интернет , или сервер не доступен.');
-          } 
-          setError(errorDiv,'Непредвиденная ошибка , попробуте перезагрузить страницу');
+          if (error === 'Failed to fetch') {
+            setError(errorDiv, 'Остутстует интернет , или сервер не доступен.');
+          }
+          setError(errorDiv, 'Непредвиденная ошибка , попробуте перезагрузить страницу');
           sleep(5000);
-         goToPage(POSTS_PAGE);
-        
+          goToPage(POSTS_PAGE);
+
         });
     }
 
@@ -87,52 +87,47 @@ export const goToPage = (newPage, data) => {
       const errorDiv = document.querySelector(".app_error");
       // TODO: реализовать получение постов юзера из API
       const id = data.userId;
-      return getUserPost({ id,token: getToken() })
+      return getUserPost({ id, token: getToken() })
         .then((newPosts) => {
           page = USER_POSTS_PAGE;
           posts = newPosts;
           renderApp();
         })
         .catch((error) => {
-          setError(errorDiv,error);
-          
+          setError(errorDiv, error);
+
           goToPage(USER_POSTS_PAGE);
         });
 
     }
     if (newPage === DEL_PAGE) {
-      console.dir(data);
-      delPost({token: getToken(), id: data.id});
+
+      delPost({ token: getToken(), id: data.id });
       page = POSTS_PAGE;
       goToPage(POSTS_PAGE);
     }
     if (newPage === TAG_POSTS_PAGE) {
-console.dir(data);
+ 
       function filterItems(query) {
-        return posts.filter(function(el) {
-            return el.description.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        return posts.filter(function (el) {
+          return el.description.toLowerCase().indexOf(query.toLowerCase()) > -1;
         })
       }
       const appEl = document.getElementById("app");
-     const id = data.id;
-      posts = filterItems(data.tagsearsh); // ['apple', 'grapes']
+      const id = data.id;
+      posts = filterItems(data.tagsearsh);
       return renderPostsPageComponent({
         appEl,
       });
-     // delPost({token: getToken(), id: data.id});
-    //  page = POSTS_PAGE;
-    //  goToPage(POSTS_PAGE);
+
     }
     if (newPage === LIKE_PAGE) {
       const id = data.id;
       const param = data.param;
       const onLike = id;
       const appEl = document.querySelector(`.post_${id}`);
-      
-    //  appEl.innerHTML =   `<div class="loading-page"><div class="loader"><div></div><div></div><div></div></div></div>`;
-      return getLike({ id, token: getToken(), like: param })
+    return getLike({ id, token: getToken(), like: param })
         .then((newPosts) => {
-
           posts.splice(0, posts.length);
           posts.push(newPosts);
           return renderPostsPageComponent({
@@ -141,10 +136,10 @@ console.dir(data);
         })
         .catch((error) => {
           const errorDiv = document.querySelector(".app_error");
-          if(error ==='Failed to fetch'){
-            setError(errorDiv,'Остутстует интернет , или сервер не доступен.');
-          } 
-          setError(errorDiv,'Непредвиденная ошибка , попробуте перезагрузить страницу');
+          if (error === 'Failed to fetch') {
+            setError(errorDiv, 'Остутстует интернет , или сервер не доступен.');
+          }
+          setError(errorDiv, 'Непредвиденная ошибка , попробуте перезагрузить страницу');
           goToPage(AUTH_PAGE);
         });
     }
@@ -193,8 +188,8 @@ const renderApp = () => {
             renderApp();
           })
           .catch((error) => {
-            const errorDiv = document.querySelector(".app_error");     
-              setError(errorDiv,error);
+            const errorDiv = document.querySelector(".app_error");
+            setError(errorDiv, error);
           });
       },
     });

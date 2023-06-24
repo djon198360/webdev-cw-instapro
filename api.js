@@ -19,8 +19,8 @@ export function getPosts({ token }) {
         throw new Error("Нет авторизации");
       }
       if (response.status < 200 && response.status === null) {
-        setError(errorDiv,'Не интернета');
-        throw new Error("Нет авторизации");
+        setError(errorDiv,'Нет интернета');
+        throw new Error();
       }
       return response.json();
     })
@@ -32,6 +32,7 @@ export function getPosts({ token }) {
 
 // https://github.com/GlebkaF/webdev-hw-api/blob/main/pages/api/user/README.md#%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F
 export function registerUser({ login, password, name, imageUrl }) {
+  const errorDiv = document.querySelector(".app_error");
   return fetch(baseHost + "/api/user", {
     method: "POST",
     body: JSON.stringify({
@@ -42,13 +43,15 @@ export function registerUser({ login, password, name, imageUrl }) {
     }),
   }).then((response) => {
     if (response.status === 400) {
-      throw new Error("Такой пользователь уже существует");
+      setError(errorDiv,"Такой пользователь уже существует");
+      throw new Error();
     }
     return response.json();
   });
 }
 
 export function loginUser({ login, password }) {
+  const errorDiv = document.querySelector(".app_error");
   return fetch(baseHost + "/api/user/login", {
     method: "POST",
     body: JSON.stringify({
@@ -57,7 +60,8 @@ export function loginUser({ login, password }) {
     }),
   }).then((response) => {
     if (response.status === 400) {
-      throw new Error("Неверный логин или пароль");
+      setError(errorDiv,"Неверный логин или пароль");
+      throw new Error();
     }
     return response.json();
   });
@@ -75,7 +79,7 @@ export function uploadImage({ file }) {
   }).then((response) => {
     if (response.status === 413 || response.status === 400) {
     setError(errorDiv,"Файл не явлется изображением");
-      throw new Error("Файл не явлется изображением");
+      throw new Error();
     }
     return response.json();
   });
@@ -83,6 +87,7 @@ export function uploadImage({ file }) {
 
 
 export function addPost({ token, description, imageUrl}) {
+  const errorDiv = document.querySelector(".app_error");
   return fetch(postsHost , {
     method: "POST",
     body: JSON.stringify({
@@ -102,6 +107,7 @@ export function addPost({ token, description, imageUrl}) {
 }
 
 export function delPost(data) {
+  const errorDiv = document.querySelector(".app_error");
   return fetch(postsHost +"/"+data.id, {
     method: "DELETE",
     headers: {
@@ -109,7 +115,7 @@ export function delPost(data) {
     },
   }).then((response) => {
     if (response.status === 201) {
-      setError(errorDiv,"Удалено");
+      setError(errorDiv,"Пост удалён");
       throw new Error();
     }
     return response.json();
@@ -117,6 +123,7 @@ export function delPost(data) {
 }
 
 export function getUserPost({ id ,token}) {
+  const errorDiv = document.querySelector(".app_error");
   return fetch(postsHost + "/user-posts/"+ id, {
     method: "GET",
     headers: {
@@ -126,7 +133,8 @@ export function getUserPost({ id ,token}) {
   })
     .then((response) => {
       if (response.status === 500) {
-        throw new Error("Нет такого пользователя");
+        setError(errorDiv,"Нет такого пользователя");
+       throw new Error();
       }
 
       return response.json();
@@ -137,6 +145,7 @@ export function getUserPost({ id ,token}) {
 }
 
 export function getLike({ id,token,like}) {
+  const errorDiv = document.querySelector(".app_error");
  (like === "true") ? like ="dislike": like="like";
   return fetch(postsHost + "/"+id +"/"+like, {
     method: "POST",
@@ -146,7 +155,7 @@ export function getLike({ id,token,like}) {
   })    .then((response) => {
     if (response.status === 401) {
      setError(errorDiv,'Нет авторизации');
-    //  throw new Error("Нет авторизации");
+     throw new Error();
     }
 
     return response.json();

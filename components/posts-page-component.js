@@ -2,6 +2,8 @@ import { DEL_PAGE, LIKE_PAGE, USER_POSTS_PAGE ,TAG_POSTS_PAGE} from "../routes.j
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, getToken } from "../index.js";
 import { wrapHashtagsInText } from "./function.js";
+import { formatDistanceToNow,parseISO } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 export function renderPostsPageComponent({ appEl, id }) {
   /**
@@ -20,7 +22,7 @@ export function renderPostsPageComponent({ appEl, id }) {
                     </div>
                     <div class="post-likes">
                       <button data-post-id="${comment.id}" data-isLiked="${comment.isLiked}" class="like-button">
-                        <img src="${comment.isLiked ? `/assets/images/like-active.svg">` : `/assets/images/like-not-active.svg">`}
+                        <img src="${comment.isLiked ? `./assets/images/like-active.svg">` : `/assets/images/like-not-active.svg">`}
                       </button>
                       <p class="post-likes-text" title="${comment.likes.length>0?"Лайкнул "+comment.likes.map((names)=>names.name).join(" , "):"Никто ещё не лайкнул"}">
                         Нравится: <strong>${comment.isLiked === true && comment.likes.length > 1 ? "вам и еще " + Number(comment.likes.length - 1) :comment.likes.length}</strong>
@@ -32,7 +34,7 @@ export function renderPostsPageComponent({ appEl, id }) {
                       ${wrapHashtagsInText(comment.description,comment.user.id)}
                     </p>
                     <p class="post-date">
-                      ${comment.createdAt}
+                      ${formatDistanceToNow(parseISO(comment.createdAt), {locale: ru})} назад
                     </p>
                     <p class="post-delete" data-post-id="${comment.id}">  &#10008; 
                     </p>
