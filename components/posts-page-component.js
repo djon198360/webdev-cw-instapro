@@ -10,7 +10,6 @@ export function renderPostsPageComponent({ appEl, id }) {
    * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
    * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
    */
-
   const appHtml = posts.map((comment) => {
     return `<li class="post post_${comment.id}">
                     <div class="post-header" data-user-id="${comment.user.id}">
