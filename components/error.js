@@ -6,7 +6,8 @@ export function setError(errorDiv, message) {
   errorDiv.style.visibility = 'visible';
 return   errorDiv.innerHTML  = message;
 }
+export function hideError() {
+  const errorDiv = document.querySelector(".app_error").style.visibility = 'hidden';
+}
 
-/* export const setError = (message) => {
-    errorDiv.textContent = message;
-  }; */
+

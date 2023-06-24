@@ -18,7 +18,10 @@ export function getPosts({ token }) {
       if (response.status === 401) {
         throw new Error("Нет авторизации");
       }
-
+      if (response.status < 200 && response.status === null) {
+        setError(errorDiv,'Не интернета');
+        throw new Error("Нет авторизации");
+      }
       return response.json();
     })
     .then((data) => {
@@ -98,6 +101,20 @@ export function addPost({ token, description, imageUrl}) {
   });
 }
 
+export function delPost(data) {
+  return fetch(postsHost +"/"+data.id, {
+    method: "DELETE",
+    headers: {
+      Authorization: data.token,
+    },
+  }).then((response) => {
+    if (response.status === 201) {
+      setError(errorDiv,"Удалено");
+      throw new Error();
+    }
+    return response.json();
+  });
+}
 
 export function getUserPost({ id ,token}) {
   return fetch(postsHost + "/user-posts/"+ id, {

@@ -1,6 +1,7 @@
-import { LIKE_PAGE, USER_POSTS_PAGE } from "../routes.js";
+import { DEL_PAGE, LIKE_PAGE, USER_POSTS_PAGE ,TAG_POSTS_PAGE} from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, getToken } from "../index.js";
+import { wrapHashtagsInText } from "./function.js";
 
 export function renderPostsPageComponent({ appEl, id }) {
   /**
@@ -24,13 +25,16 @@ export function renderPostsPageComponent({ appEl, id }) {
                       <p class="post-likes-text" title="${comment.likes.length>0?"Лайкнул "+comment.likes.map((names)=>names.name).join(" , "):"Никто ещё не лайкнул"}">
                         Нравится: <strong>${comment.isLiked === true && comment.likes.length > 1 ? "вам и еще " + Number(comment.likes.length - 1) :comment.likes.length}</strong>
                       </p>
+
                     </div>
                     <p class="post-text">
                       <span class="user-name">${comment.user.name}</span>
-                      ${comment.description}
+                      ${wrapHashtagsInText(comment.description,comment.user.id)}
                     </p>
                     <p class="post-date">
                       ${comment.createdAt}
+                    </p>
+                    <p class="post-delete" data-post-id="${comment.id}">  &#10008; 
                     </p>
                   </li>
                 `;
@@ -65,5 +69,25 @@ export function renderPostsPageComponent({ appEl, id }) {
     })
   }
 
+  for (let tag of document.querySelectorAll(".tag")) {
+    tag.addEventListener("click", () => {
+      goToPage(TAG_POSTS_PAGE, {
+        tagsearsh: tag.dataset.tag,
+        id : tag.dataset.id,
+      });
+    });
+  }
+
+  for (let del of document.querySelectorAll(".post-delete")) {
+    del.addEventListener("click", () => {
+      const idDel = del.dataset.postId;
+      goToPage(DEL_PAGE, {
+        id: idDel,
+      }
+      );
+      
+ 
+    });
+  }
 
 }

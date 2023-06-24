@@ -1,5 +1,5 @@
 import { uploadImage } from "../api.js";
-import { setError } from "./error.js";
+import { hideError, setError } from "./error.js";
 
 export function renderUploadImageComponent({ element, onImageUrlChange, page = null }) {
   let imageUrl = "";
@@ -56,23 +56,27 @@ export function renderUploadImageComponent({ element, onImageUrlChange, page = n
     fileInputElement?.addEventListener("change", () => {
       const file = fileInputElement.files[0];
       if (file) {
-        
+
         const lableEl = document.querySelector(".file-upload-label");
         lableEl.setAttribute("disabled", true);
         lableEl.textContent = "Загружаю файл...";
+
         uploadImage({ file }).then(({ fileUrl }) => {
           imageUrl = fileUrl;
           onImageUrlChange(imageUrl);
           render();
-      
-            document.querySelector(".textarea_description").addEventListener("input",(e)=>{
-              (e.target.value.length > 5 )? document.querySelector(".add_button").removeAttribute("disabled"):document.querySelector(".add_button").setAttribute("disabled",true);
+          hideError();
+
+          if (document.querySelector(".textarea_description")) {
+            document.querySelector(".textarea_description").addEventListener("input", (e) => {
+              (e.target.value.length > 5) ? document.querySelector(".add_button").removeAttribute("disabled") : document.querySelector(".add_button").setAttribute("disabled", true);
             });
-          
+          }
         }).catch((error) => {
-          if(error.message === "Failed to fetch"){
-          setError(errorDiv, "Изображение не загружено, нет соединения с сервером!");}
-          else {setError(errorDiv, error.message);}
+          if (error.message === "Failed to fetch") {
+            setError(errorDiv, "Изображение не загружено, нет соединения с сервером!");
+          }
+          else { setError(errorDiv, error.message); }
           render();
         })
           ;
@@ -82,7 +86,7 @@ export function renderUploadImageComponent({ element, onImageUrlChange, page = n
     element
       .querySelector(".file-upload-remove-button")
       ?.addEventListener("click", () => {
-        document.querySelector(".button").setAttribute("disabled", true);
+        document.querySelector(".add_button").setAttribute("disabled", true);
         imageUrl = "";
         onImageUrlChange(imageUrl);
         render();

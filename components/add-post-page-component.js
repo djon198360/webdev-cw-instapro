@@ -1,7 +1,7 @@
 import { setError } from "./error.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
-
+import { htmlSpecialChars } from "./function.js";
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   let imageUrl = "";
@@ -42,7 +42,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       
       if(document.querySelector('.textarea_description').value != "")
       {
-        const description = document.querySelector('.textarea_description').value;
+        const description = htmlSpecialChars(document.querySelector('.textarea_description').value);
       onAddPostClick({
         description: description,
         imageUrl: imageUrl,

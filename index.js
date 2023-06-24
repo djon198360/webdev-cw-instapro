@@ -1,4 +1,4 @@
-import { addPost, getPosts, getUserPost, getLike } from "./api.js";
+import { addPost, getPosts, getUserPost, getLike,delPost } from "./api.js";
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { renderAuthPageComponent } from "./components/auth-page-component.js";
 import {
@@ -8,6 +8,8 @@ import {
   LOADING_PAGE,
   POSTS_PAGE,
   USER_POSTS_PAGE,
+  DEL_PAGE,
+  TAG_POSTS_PAGE,
 } from "./routes.js";
 import { renderPostsPageComponent } from "./components/posts-page-component.js";
 import { renderLoadingPageComponent } from "./components/loading-page-component.js";
@@ -19,6 +21,7 @@ import {
 import { renderUserPostPageComponent } from "./components/user-post-page-component.js";
 
 import { setError } from "./components/error.js";
+import { sleep } from "./components/function.js";
 const errorDiv = document.querySelector(".app_error");
 export let user = getUserFromLocalStorage();
 export let page = null;
@@ -47,6 +50,8 @@ export const goToPage = (newPage, data) => {
       USER_POSTS_PAGE,
       LOADING_PAGE,
       LIKE_PAGE,
+      DEL_PAGE,
+      TAG_POSTS_PAGE,
     ].includes(newPage)
   ) {
     if (newPage === ADD_POSTS_PAGE) {
@@ -72,15 +77,16 @@ export const goToPage = (newPage, data) => {
             setError(errorDiv,'Остутстует интернет , или сервер не доступен.');
           } 
           setError(errorDiv,'Непредвиденная ошибка , попробуте перезагрузить страницу');
-          goToPage(POSTS_PAGE);
+          sleep(5000);
+         goToPage(POSTS_PAGE);
+        
         });
     }
 
     if (newPage === USER_POSTS_PAGE) {
+      const errorDiv = document.querySelector(".app_error");
       // TODO: реализовать получение постов юзера из API
       const id = data.userId;
-      console.log("Открываю страницу пользователя: ", data.userId);
-
       return getUserPost({ id,token: getToken() })
         .then((newPosts) => {
           page = USER_POSTS_PAGE;
@@ -88,12 +94,35 @@ export const goToPage = (newPage, data) => {
           renderApp();
         })
         .catch((error) => {
-          console.error(error);
+          setError(errorDiv,error);
+          
           goToPage(USER_POSTS_PAGE);
         });
 
     }
-
+    if (newPage === DEL_PAGE) {
+      console.dir(data);
+      delPost({token: getToken(), id: data.id});
+      page = POSTS_PAGE;
+      goToPage(POSTS_PAGE);
+    }
+    if (newPage === TAG_POSTS_PAGE) {
+console.dir(data);
+      function filterItems(query) {
+        return posts.filter(function(el) {
+            return el.description.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        })
+      }
+      const appEl = document.getElementById("app");
+     const id = data.id;
+      posts = filterItems(data.tagsearsh); // ['apple', 'grapes']
+      return renderPostsPageComponent({
+        appEl,
+      });
+     // delPost({token: getToken(), id: data.id});
+    //  page = POSTS_PAGE;
+    //  goToPage(POSTS_PAGE);
+    }
     if (newPage === LIKE_PAGE) {
       const id = data.id;
       const param = data.param;
@@ -164,16 +193,15 @@ const renderApp = () => {
             renderApp();
           })
           .catch((error) => {
-            const errorDiv = document.querySelector(".app_error");
-          
+            const errorDiv = document.querySelector(".app_error");     
               setError(errorDiv,error);
-        //    setError(error);
-            //  goToPage(ADD_POSTS_PAGE);
           });
       },
     });
 
   }
+
+
 
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
