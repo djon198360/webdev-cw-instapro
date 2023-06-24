@@ -1,6 +1,6 @@
 import { DEL_PAGE, LIKE_PAGE, USER_POSTS_PAGE ,TAG_POSTS_PAGE} from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, getToken } from "../index.js";
+import { posts, goToPage } from "../index.js";
 import { wrapHashtagsInText } from "./function.js";
 import { formatDistanceToNow,parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
