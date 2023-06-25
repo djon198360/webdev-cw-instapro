@@ -69,6 +69,7 @@ export const goToPage = (newPage, data) => {
         .then((newPosts) => {
           page = POSTS_PAGE;
           posts = newPosts;
+          
           renderApp();
         })
         .catch((error) => {
@@ -94,17 +95,27 @@ export const goToPage = (newPage, data) => {
           renderApp();
         })
         .catch((error) => {
-          setError(errorDiv, error);
+          setError(errorDiv, error.message);
 
           goToPage(USER_POSTS_PAGE);
         });
 
     }
     if (newPage === DEL_PAGE) {
+      const errorDiv = document.querySelector(".app_error");
+      return delPost({ token: getToken(), id: data.id })
+      .then((del_post) =>{
+        page = POSTS_PAGE;
+        goToPage(POSTS_PAGE);
+      }).catch((error) => {
+        if (error.message === 'Failed to fetch') {
+          setError(errorDiv, 'Остутстует интернет , или сервер не доступен.');
+        }
+       else {setError(errorDiv, error.message);}
 
-      delPost({ token: getToken(), id: data.id });
-      page = POSTS_PAGE;
-      goToPage(POSTS_PAGE);
+       
+      });
+
     }
     if (newPage === TAG_POSTS_PAGE) {
  
@@ -124,23 +135,32 @@ export const goToPage = (newPage, data) => {
     if (newPage === LIKE_PAGE) {
       const id = data.id;
       const param = data.param;
-      const onLike = id;
+      const likeIdLocal = data.likeIdLocal;
       const appEl = document.querySelector(`.post_${id}`);
     return getLike({ id, token: getToken(), like: param })
         .then((newPosts) => {
-          posts.splice(0, posts.length);
-          posts.push(newPosts);
+          posts[likeIdLocal].isLiked = newPosts.isLiked;
+          posts[likeIdLocal].likes = (newPosts.likes)?newPosts.likes:0;
           return renderPostsPageComponent({
             appEl, id,
           });
         })
         .catch((error) => {
+          const like = document.querySelector('.loading_like');
           const errorDiv = document.querySelector(".app_error");
-          if (error === 'Failed to fetch') {
+          if (error.message === 'Failed to fetch') {
+            like.classList.remove('loading_like');
             setError(errorDiv, 'Остутстует интернет , или сервер не доступен.');
           }
-          setError(errorDiv, 'Непредвиденная ошибка , попробуте перезагрузить страницу');
-          goToPage(AUTH_PAGE);
+         else if (error.message === 'Вы не авторизованы, авторизуйтесь!') {
+            setError(errorDiv, error.message);
+            like.classList.remove('loading_like');
+           // goToPage(AUTH_PAGE);
+          }
+          else {like.classList.remove('loading_like');
+          setError(errorDiv, 'Неизвестная ошибка!');}
+
+        //  goToPage(AUTH_PAGE);
         });
     }
 

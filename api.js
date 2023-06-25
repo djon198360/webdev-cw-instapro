@@ -115,10 +115,15 @@ export function delPost(data) {
     },
   }).then((response) => {
     if (response.status === 201) {
-      setError(errorDiv,"Пост удалён");
-      throw new Error();
+      throw new Error("Пост удалён");
+    }
+    else  if (response.status === 401) {
+      throw new Error('Вы не авторизованы, авторизуйтесь!');
     }
     return response.json();
+  })
+  .then((data) => {
+    return data.post;
   });
 }
 
@@ -129,14 +134,14 @@ export function getUserPost({ id ,token}) {
     headers: {
       Authorization: token,
     },
-  
   })
     .then((response) => {
       if (response.status === 500) {
-        setError(errorDiv,"Нет такого пользователя");
-       throw new Error();
+       throw new Error('Нет такого пользователя!');
       }
-
+      if (response.status === undefined) {
+        throw new Error('Нет интернета');
+       }
       return response.json();
     })
     .then((data) => {
@@ -152,13 +157,16 @@ export function getLike({ id,token,like}) {
     headers: {
       Authorization: token,
     },
-  })    .then((response) => {
+  })
+  .then((response) => {
     if (response.status === 401) {
-     setError(errorDiv,'Нет авторизации');
-     throw new Error();
+    // setError(errorDiv,'Нет авторизации');
+     throw new Error('Вы не авторизованы, авторизуйтесь!');
     }
-
-    return response.json();
+    if (response.status === 0) {
+       throw new Error('Нет интернета');
+      }
+   return response.json();
   })
   .then((data) => {
     return data.post;

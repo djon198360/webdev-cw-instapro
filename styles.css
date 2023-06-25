@@ -232,6 +232,19 @@
   flex-direction: row;
   align-items: center;
 }
+.post_delete{
+display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+.post_footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
 .like-button {
   border: none;
@@ -251,6 +264,8 @@
   line-height: 18px;
   margin-top: 5px;
 }
+
+
 
 .post-date {
   color: #8a8a8a;
