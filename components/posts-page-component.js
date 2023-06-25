@@ -22,11 +22,10 @@ export function renderPostsPageComponent({ appEl, id }) {
                     <div class="post-likes">
                       <button data-post-id="${comment.id}" data-isLiked="${comment.isLiked}" class="like-button">
                         <img src="${comment.isLiked ? `./assets/images/like-active.svg">` : `/assets/images/like-not-active.svg">`}
-                      </button>
+                      </button>                    
                       <p class="post-likes-text" title="${comment.likes.length>0?"Лайкнул "+comment.likes.map((names)=>names.name).join(" , "):"Никто ещё не лайкнул"}">
                         Нравится: <strong>${comment.isLiked === true && comment.likes.length > 1 ? "вам и еще " + Number(comment.likes.length - 1) :comment.likes.length}</strong>
                       </p>
-
                     </div>
                     <p class="post-text">
                       <span class="user-name">${comment.user.name}</span>
