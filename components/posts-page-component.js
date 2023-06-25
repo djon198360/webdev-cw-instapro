@@ -2,8 +2,8 @@ import { DEL_PAGE, LIKE_PAGE, USER_POSTS_PAGE ,TAG_POSTS_PAGE} from "../routes.j
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
 import { wrapHashtagsInText } from "./function.js";
-//import { formatDistanceToNow,parseISO } from 'date-fns';
-//import { ru } from 'date-fns/locale';
+import { formatDistanceToNow,parseISO } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 export function renderPostsPageComponent({ appEl, id }) {
   /**
@@ -38,7 +38,7 @@ export function renderPostsPageComponent({ appEl, id }) {
                       ${wrapHashtagsInText(comment.description,comment.user.id)}
                     </p>
                     <p class="post-date">
-                     
+                     ${formatDistanceToNow(parseISO(comment.createdAt), {locale: ru})} назад
                     </p>
                     </div>
                   </li>
