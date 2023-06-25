@@ -21,7 +21,7 @@ export function renderUserPostPageComponent({ appEl }) {
                       </div>
                       <div class="post-likes">
                         <button data-post-id="${comment.id}" class="like-button">
-                          <img src="${comment.isLiked ? `/assets/images/like-active.svg">` : `/assets/images/like-not-active.svg">`}
+                          <img src="${comment.isLiked ? `./assets/images/like-active.svg">` : `./assets/images/like-not-active.svg">`}
                         </button>
                         <p class="post-likes-text" title="${comment.likes.length>0?"Лайкнул "+comment.likes.map((names)=>names.name).join(" , "):"Никто ещё не лайкнул"}">
                           Нравится: <strong>${comment.isLiked === true && comment.likes.length > 1 ? "вам и еще " + Number(comment.likes.length - 1) :comment.likes.length}</strong>
